@@ -19,7 +19,7 @@ Ext.define('TDGUI.view.grid.PharmByTargetScrollingGrid', {
   listeners: {
     'sortchange': function (ct, column, direction, eOpts) {
       console.log('PharmByTargetNameGrid: sortchange()');
-      this.setLoading(true);
+      // this.setLoading(true);
     }
   },
 
@@ -114,7 +114,7 @@ Ext.define('TDGUI.view.grid.PharmByTargetScrollingGrid', {
 			}, {
         header: 'Activity Type',
         dataIndex: 'activity_activity_type',
-        width: 72,
+        width: 92,
         renderer: targetProvenanceRenderer,
         align: 'center',
         tdCls: 'gridRowPadding'

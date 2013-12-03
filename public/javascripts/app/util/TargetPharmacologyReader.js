@@ -61,7 +61,8 @@ Ext.define('TDGUI.util.TargetPharmacologyReader', {
             compound_pref_label = match['prefLabel'];
             cw_src = match[TDGUI.util.LDAConstants.LDA_IN_DATASET];
             compound_pref_label_item = cw_compound_uri;
-          } else if (TDGUI.util.LDAConstants.LDA_SRC_CLS_MAPPINGS[src] == 'chemspiderValue') {
+          }
+					else if (TDGUI.util.LDAConstants.LDA_SRC_CLS_MAPPINGS[src] == 'chemspiderValue') {
             cs_compound_uri = match[TDGUI.util.LDAConstants.LDA_ABOUT];
             csid = cs_compound_uri.split('/').pop();
             compound_inchi = match['inchi'];
@@ -72,7 +73,8 @@ Ext.define('TDGUI.util.TargetPharmacologyReader', {
             compound_inchi_item = chemSpiderLink;
             compound_inchikey_item = chemSpiderLink;
             compound_smiles_item = chemSpiderLink;
-          } else if (TDGUI.util.LDAConstants.LDA_SRC_CLS_MAPPINGS[src] == 'drugbankValue') {
+          }
+					else if (TDGUI.util.LDAConstants.LDA_SRC_CLS_MAPPINGS[src] == 'drugbankValue') {
             drugbank_compound_uri = match[TDGUI.util.LDAConstants.LDA_ABOUT];
             compound_drug_type = match['drugType'];
             compound_generic_name = match['genericName'];

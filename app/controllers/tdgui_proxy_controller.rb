@@ -42,7 +42,7 @@ class TdguiProxyController < ApplicationController
 
 		tdgui_proxy = TdguiProxy.new
 		json_entries = tdgui_proxy.get_multiple_entries(accs.join(','))
-puts "json_entries: #{json_entries}\n"
+		# puts "json_entries: #{json_entries}\n"
 
 
 #		uuids_arr = uuids_query.split(',')
@@ -232,10 +232,11 @@ puts "json_entries: #{json_entries}\n"
 # @params [String] uri the uri to make the request.
 # @params [String] page the number of page to return. To convert to the start param, start = page*pagesize+1
 # @params [String] pagesize the number of results to return for this request.
-	def get_pharm_by_target_page (uri = params[:uri], page = params[:page], num_results=params[:pagesize])
+	def get_pharm_by_target_page (uri = params[:uri], page = params[:page],
+									num_results=params[:pagesize], order_by=params[:_orderBy])
 		pharm_proxy = TdguiProxy.new
 
-		resp = pharm_proxy.get_pharm_results_by_page(uri, page, num_results)
+		resp = pharm_proxy.get_pharm_results_by_page(uri, page, num_results, order_by)
 		render :json => resp.to_json, :layout => false
 	end
 

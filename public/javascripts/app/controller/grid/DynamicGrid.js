@@ -153,7 +153,7 @@ Ext.define('TDGUI.controller.grid.DynamicGrid', {
 	 * @param {Object} opts passed options
 	 */
 	prepPharmaGrid: function (comp, opts) {
-		console.info("Prepping pharmaGrid!!");
+		console.info("DynamicGrid.controller - Prepping pharmaGrid!! "+comp.$className);
 		// var grid_view = this.getPharmaGrid(); // gets the grid, no the panel as a whole
 		// var grid_store = grid_view.getStore(); // gets the store which feed the grid, lda.TargetPharma...Store
 
@@ -174,7 +174,7 @@ Ext.define('TDGUI.controller.grid.DynamicGrid', {
 	 * @param {boolean} success true if request to backend was successful; false otherwise
 	 */
 	pharmaStoreLoadComplete: function (store, recs, success) {
-		console.log("pharma store completed...");
+		console.log("DynamicGrid.controller - pharma store completed..."+recs.length);
 		var grid_view = this;
 		var grid_store = grid_view.getStore();
 		if (success) {
@@ -210,7 +210,7 @@ Ext.define('TDGUI.controller.grid.DynamicGrid', {
 	 * Has to be called in any way before building the grid
 	 */
 	fetchTotalResults: function () {
-		// console.log('DynamicGrid: fetchTotalResults() for ' + comp.$className);
+		console.log('DynamicGrid.controller - fetchTotalResults()');
 		try {
 			// Choosing between pharmaGrid or multiple targets grid
 			var grid_view = this.getPharmaGrid();
@@ -297,7 +297,7 @@ Ext.define('TDGUI.controller.grid.DynamicGrid', {
 	 * be something like { actionMethods: { read: 'GET' }, api-read: 'urlread', params: {param1:val1, param2: val2}}
 	 */
 	initGrid: function (comp, opts) {
-		console.log("DynamicGrid controller: initGrid for " + comp.$className+" vs "+comp.getXType());
+		console.log("DynamicGrid.controller - initGrid for " + comp.$className+" vs "+comp.getXType());
 
 		if (comp.getXType().match(/tdgui-pharmbytargetscroll-grid/) != null)
 			this.fetchTotalResults();
@@ -356,11 +356,11 @@ Ext.define('TDGUI.controller.grid.DynamicGrid', {
 	 * @return {Boolean}
 	 */
 	setAndFillGrid: function (store, records, success) { // scope: grid instance
-
+		console.log('DynamicGrid.controller - setAndFillGrid for '+records.length+' recs');
 		var this_gridview = this;
-		var listitems = this_gridview.up('viewport').down('tdgui-item-multilist')
-		var numListItems = listitems.getStore().count()
-		var numGridItems = store.count()
+		var listitems = this_gridview.up('viewport').down('tdgui-item-multilist');
+		var numListItems = listitems.getStore().count();
+		var numGridItems = store.count();
 
 		if (success === false) {
 			Ext.MessageBox.show({
