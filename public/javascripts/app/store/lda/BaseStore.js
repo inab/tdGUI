@@ -24,7 +24,7 @@ Ext.define('TDGUI.store.lda.BaseStore', {
     beforeprefetch: {
       fn: function () {
         var me = this;
-        console.log('Proxy: ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
+        console.log('BaseStore.beforeprefetch: ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
         me.updateProxyURL();
       }
     },
@@ -33,7 +33,7 @@ Ext.define('TDGUI.store.lda.BaseStore', {
       fn: function () {
         var me = this;
         console.log('Proxy: ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
-//        me.updateProxyURL();
+        me.updateProxyURL();
       }
     }
   },
@@ -44,7 +44,7 @@ Ext.define('TDGUI.store.lda.BaseStore', {
 // but the behaviour still persists.
 // TODO check EXTJS updates to see if it gets fixed
   prefetchPage: function (page, options) {
-    console.log('BaseStore.prefetchPage ('+page+'...)');
+    console.log('BaseStore.prefetchPage ('+page+'...) and '+this.$className);
     var me = this,
       pageSize = me.pageSize || me.defaultPageSize,
       start = (page - 1) * me.pageSize,
@@ -71,7 +71,7 @@ Ext.define('TDGUI.store.lda.BaseStore', {
       _format: this._format,
       uri: this.uri
     });
-    //        console.log('Proxy: ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
+    console.log('BaseStore.updateProxyURL(): ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
   },
 
 

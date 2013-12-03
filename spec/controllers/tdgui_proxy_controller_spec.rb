@@ -74,7 +74,7 @@ describe TdguiProxyController do
 			json_resp['accessions'].length.should be > 0
 			json_resp['proteinFullName'].should_not be_empty
 			json_resp['proteinFullName'].index(thelabel).should_not be_nil
-			json_resp['organismSciName'].should be == 'Homo Sapiens'
+			json_resp['organismSciName'].downcase.should be == 'Homo Sapiens'.downcase
 
 		end
 
@@ -141,8 +141,8 @@ describe TdguiProxyController do
 	#				:uuids => 'd593db45-e954-4e97-94f7-c039350f97f4,ec79efff-65cb-45b1-a9f5-dddfc1c4025c,eeaec894-d856-4106-9fa1-662b1dc6c6f1,979f02c6-3986-44d6-b5e8-308e89210c8d,31dd02fa-3522-438e-bef5-da14902f6c1b'
 
 			get :multiple_entries_retrieval, :entries => target_ids.join(',')
-	puts "\n\nentries: #{target_ids.join(',')}\n";
-	puts "\n#{response.body}\n\n"
+			# puts "\n\nentries: #{target_ids.join(',')}\n";
+			# puts "\n#{response.body}\n\n"
 			json_resp = JSON.parse(response.body)
 			json_resp.should_not be_nil
 			json_resp['ops_records'].should_not be_empty
@@ -166,7 +166,7 @@ describe TdguiProxyController do
 	#				:uuids => 'd593db45-e954-4e97-94f7-c039350f97f4,ec79efff-65cb-45b1-a9f5-dddfc1c4025c,eeaec894-d856-4106-9fa1-662b1dc6c6f1,979f02c6-3986-44d6-b5e8-308e89210c8d,31dd02fa-3522-438e-bef5-da14902f6c1b'
 
 			get :multiple_entries_retrieval, :entries => target_ids.join(',')
-	puts "\n#{response.body}\n"
+			# puts "\n#{response.body}\n"
 			json_resp = JSON.parse(response.body)
 			json_resp.should_not be_nil
 			json_resp['ops_records'].should_not be_empty
@@ -218,6 +218,7 @@ describe TdguiProxyController do
 			json_resp['metaData']['fields'][0]['name'].should be == 'pdbimg'
 		end
 =end
+
 	end
 
 =begin
@@ -235,7 +236,7 @@ describe TdguiProxyController do
 		end
 
 	end
-
+=end
 
 	describe "should deal with pharma information" do
 
@@ -279,8 +280,71 @@ describe TdguiProxyController do
 			json_resp['result']['itemsPerPage'].should be == 20
 			json_resp['result']['items'].should have((json_resp['result']['itemsPerPage']).to_i).items
 		end
+
+
+		it "should get pharma results sorted by molweight ascending" do
+			uri = 'http://www.conceptwiki.org/concept/979f02c6-3986-44d6-b5e8-308e89210c8d'
+			order_by = '?molweight'
+			get :get_pharm_by_target_page, :uri => uri, :page => 2,
+					:pagesize => 20, :orderBy => order_by
+
+			response.should_not be_nil
+			response.code.to_i.should be == 200
+			response.body.should_not be == ''
+
+			json_resp = JSON.parse(response.body)
+			json_resp.should be_kind_of Hash
+			json_resp['result'].should be_kind_of Hash
+			json_resp['result']['items'].should be_kind_of Array
+
+			items_list = json_resp['result']['items']
+			mwt_list = items_list.map { |item|
+				item['forMolecule']['full_mwt']
+			}
+
+			mwt_list.should_not be_nil
+			mwt_list.each_with_index {|elem, index|
+				if index+1 < mwt_list.length
+					mwt_list[index].should be <= mwt_list[index+1]
+				end
+			}
+
+		end
+
+
+		it "should get pharma results sorted by molweight descending" do
+			uri = 'http://www.conceptwiki.org/concept/979f02c6-3986-44d6-b5e8-308e89210c8d'
+			order_by = 'DESC(?molweight)'
+			get :get_pharm_by_target_page, :uri => uri, :page => 2,
+					:pagesize => 20, :orderBy => order_by
+
+			response.should_not be_nil
+			response.code.to_i.should be == 200
+			response.body.should_not be == ''
+
+			json_resp = JSON.parse(response.body)
+			json_resp.should be_kind_of Hash
+			json_resp['result'].should be_kind_of Hash
+			json_resp['result']['items'].should be_kind_of Array
+
+			items_list = json_resp['result']['items']
+			mwt_list = items_list.map { |item|
+				item['forMolecule']['full_mwt']
+			}
+
+			mwt_list.should_not be_nil
+			mwt_list.each_with_index {|elem, index|
+				if index+1 < mwt_list.length
+					mwt_list[index].should be >= mwt_list[index+1]
+				end
+			}
+
+		end
+
+
 	end
-=end
+
+=begin
 	describe "should map an URL" do
 		it "get a conceptwiki url from http://www.uniprot.org/uniprot/P01308" do
 			url = 'http://www.uniprot.org/uniprot/P01308'
@@ -331,5 +395,6 @@ describe TdguiProxyController do
 		json_resp['success'].should_not be_nil
 		json_resp['success'].should be_true
 	end
+=end
 
 end

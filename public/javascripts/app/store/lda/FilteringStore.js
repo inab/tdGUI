@@ -13,7 +13,7 @@ Ext.define('TDGUI.store.lda.FilteringStore', {
   // Set up the sort properties, check the direction of sort and prepend with
   // '-' if required
   sortColumn: function (arguments) {
-    console.log('TDGUI.store.lda.FilteringStore: sortColumn()');
+    console.log('TDGUI.store.lda.FilteringStore: sortColumn('+arguments[0].property+')');
     var sort_column = "?" + TDGUI.util.LDAConstants.LDADataItems[arguments[0].property];
     var sort_direction = arguments[0].direction;
     if (sort_direction == "DESC") {
@@ -28,17 +28,17 @@ Ext.define('TDGUI.store.lda.FilteringStore', {
     this.proxy.url = this.BASE_URL;
 		this.proxy.url += this.BASE_URL.indexOf('?') == -1? '?': '&';
 		this.proxy.url += this.stringEncoder.toQueryString({
-        assay_organism: this.assay_organism,
-        activity_type: this.activity_type,
-        //activity_value:this.activity_value,
-        //activity_condition:this.activity_condition,
-        _format: this._format,
-				_orderBy: this.sort_column,
-        uri: this.uri
-      });
+			assay_organism: this.assay_organism,
+			activity_type: this.activity_type,
+			//activity_value:this.activity_value,
+			//activity_condition:this.activity_condition,
+			_format: this._format,
+			_orderBy: this.sort_column,
+			uri: this.uri
+		});
 
     this.setAllConditions();
-    console.log('Proxy: ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
+		console.log('FilteringStore.updateProxyURL(): ' + Ext.ClassManager.getName(this) + ' URL updated to: ' + this.proxy.url);
   },
 
 

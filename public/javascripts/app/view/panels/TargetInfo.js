@@ -691,7 +691,7 @@ Ext.define('TDGUI.view.panels.TargetInfo', {
 
     }, this);
     var pdbField = this.down('#pdb_id_page');
-    console.log("TargetInfo pdb vale: " +finalPDBValue);
+    // console.log("TargetInfo pdb vale: " +finalPDBValue);
     pdbField.setRawValue(finalPDBValue);
     pdbField.show();
 
@@ -840,7 +840,7 @@ console.info ('TargetInfo.endLoading')
 		provIconsPath: '/images/provenance/',
 
 		provenanceTargetSummaryRenderer: function (value, field) {
-			console.log("Target by name provenance renderer for field: "+field.itemId+"("+value+")");
+			// console.log("Target by name provenance renderer for field: "+field.itemId+"("+value+")");
 			var me = this.up('tdgui-targetinfopanel'); // this is the field!!
 
 			var sources = new Array();

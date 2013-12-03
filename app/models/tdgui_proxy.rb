@@ -504,18 +504,34 @@ puts "the url: #{url}"
 	end
 
 
-	def get_pharm_results_by_page (concept_uri, page, pageSize)
+# It gets a list of pageSize pharam results, depending on page and order_by params
+# @param [String] concept_uri
+# @param [Number] page
+# @param [Number] pageSize
+# @param [String] order_by_param is the field the result is to be sorted by. If descending
+# order, the param to send to server should be 'DESC(field)'. Examples:
+# _orderBy=%3Fstd_value or _orderBy=DESC(%3Fstd_value)
+	def get_pharm_results_by_page (concept_uri, page, pageSize, order_by_param = '')
 		inner_proxy = InnerProxy.new
 
 		page = page.nil? ? 1: page
 		pageSize = pageSize.nil? ? 10: pageSize
 		uri_unencoded = CGI::unescape(concept_uri) == concept_uri
 		esc_uri = uri_unencoded ? CGI::escape(concept_uri) : concept_uri
-		url = inner_proxy.ops_api_pharma_page_results + "?_format=json&uri=#{esc_uri}"
-		url = url + "&_page=#{page}&_pageSize=#{pageSize}"
-		url = url + "&app_id=#{inner_proxy.get_app_id}&app_key=#{inner_proxy.get_app_key}"
-		response = LibUtil.request(url, [])
 
+		esc_orderby =
+		if order_by_param != nil && order_by_param != ''
+			order_by_encoded = CGI::unescape(order_by_param) == order_by_param
+			esc_orderby = order_by_encoded ? CGI::escape(order_by_param) : order_by_param
+			esc_orderby = "&_orderBy=#{esc_orderby}"
+		end
+		puts "tdguiProxy.get_pharm_results_by_page: FUCKING esc_orderby is #{esc_orderby} vs #{order_by_param}"
+
+		url = inner_proxy.ops_api_pharma_page_results + "?_format=json&uri=#{esc_uri}"
+		url = url + "&_page=#{page}&_pageSize=#{pageSize}#{esc_orderby}"
+		url = url + "&app_id=#{inner_proxy.get_app_id}&app_key=#{inner_proxy.get_app_key}"
+
+		response = LibUtil.request(url, [])
 		if response.code.to_i != 200
 			puts "ConceptWiki get service not working properly right now!"
 			nil
